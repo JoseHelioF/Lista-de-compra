@@ -48,6 +48,7 @@ button {
   border: none;
   background-color: transparent;
   font-size: 80%;
+  cursor: pointer;
 }
 
 input {
@@ -58,9 +59,19 @@ input {
 
 .btnEdit {
   color: var(--green-dark);
+  border: 1px solid black;
+  border-radius: 3px ;
+  margin-left: 5px;
+  padding: 2px;
+  cursor: pointer;
 }
 .btnDelete {
   color: var(--red-ligth);
+  border: 1px solid black;
+  border-radius: 3px ;  
+  margin-left: 5px;
+  padding: 2px;
+  
 }
 .btnGera {
   background-color: var(--blue-light);
