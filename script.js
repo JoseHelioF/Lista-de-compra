@@ -5,19 +5,32 @@ let base = [];
 let textoEntrada = document.getElementsByTagName("input");
 var elemento_pai = document.getElementsByTagName("section")[0];
 let position = Object.keys(base).length;
+var db = openDatabase("myDB", "1.0", "TIPS Database Example", 2 * 1024 * 1024);
+
+db.transaction(function (tx) {
+  tx.executeSql(
+    "CREATE TABLE IF NOT EXISTS myTable (id INTERGER PRIMARY KEY , nome TEXT)"
+  );
+});
+
+console.log(db);
 
 //Gerar os valores para inserir no array
 function gera() {
   if (textoEntrada[0].value) {
-    const id = new Date().getTime().toString()
-    base[position + 1] = [id, textoEntrada[0].value];
-    position++;
+    nome = textoEntrada[0].value;
+    id = new Date().getDate().toString();
+    console.log("id", id);
+    db.transaction(function (tx) {
+      tx.executeSql("INSERT INTO  myTable (id,nome) VALUES (?,?)", [id, nome]);
+    });
     criaArticle(id);
-  } else {
-    alert("Digite um valor");
+  } 
+  else {
+    alert("Digite algo");
   }
+
   textoEntrada[0].value = "";
-  console.log(base);
 }
 
 //Cria o elemento sem fazer vínculo
@@ -28,7 +41,7 @@ function geraElemento(nometag) {
 
 //Gera atributos para o elemento
 function geraAtributo(elemento, tipo, valor) {
-  var atributo = elemento.setAttribute(tipo, valor)
+  var atributo = elemento.setAttribute(tipo, valor);
   return atributo;
 }
 
@@ -40,69 +53,82 @@ function geraFilho(pai, tag) {
 
 //Cria o elemento completo com classes e atributos e vincula elementos filhos
 function criaArticle(id) {
-
   var tagArticle = geraElemento("article");
-  geraAtributo(tagArticle, "class", "articles")
-  geraAtributo(tagArticle, "dados", id)
+  geraAtributo(tagArticle, "class", "articles");
+  geraAtributo(tagArticle, "dados", id);
   var tagArticleF = geraFilho(elemento_pai, tagArticle);
 
   var tagP = geraElemento("p");
-  texto = base[position][1];
+  texto = textoEntrada[0].value;
   const textNode = document.createTextNode(texto);
   var tagPF = geraFilho(tagP, textNode);
   geraFilho(tagArticleF, tagP);
 
   var tagD = geraElemento("div");
-  geraAtributo(tagD, "class", "buttons")
+  geraAtributo(tagD, "class", "buttons");
   var tagBD = geraFilho(tagArticleF, tagD);
 
   var tagB = geraElemento("button");
-  geraAtributo(tagB, "class", "btnEdit")
-  geraAtributo(tagB, "onclick", "editar(this)")
+  geraAtributo(tagB, "class", "btnEdit");
+  geraAtributo(tagB, "onclick", "editar(this)");
   var tagBF = geraFilho(tagBD, tagB);
-  document.getElementsByClassName('btnEdit')[position-1].innerHTML = 'Editar'
+  tagBF.innerHTML = "Editar";
+
+  console.log(tagBF);
 
   var tagB = geraElemento("button");
-  geraAtributo(tagB, "class", "btnDelete")
-  geraAtributo(tagB, "onclick", "excluir(this)")
+  geraAtributo(tagB, "class", "btnDelete");
+  geraAtributo(tagB, "onclick", "excluir(this)");
   var tagBF = geraFilho(tagBD, tagB);
-  document.getElementsByClassName('btnDelete')[position-1].innerHTML = 'Excluir'
+  tagBF.innerHTML = "Excluir";
 }
 
 function excluir(valor) {
-  let elemento = valor.parentNode.parentNode
-  var id = elemento.getAttribute('dados');
-  var newList = [];
+  // let elemento = valor.parentNode.parentNode
+  // var id = elemento.getAttribute('dados');
+  // var newList = [];
 
-  for (let i in base) {
-    if (base[i][0] != id) {
-      newList.push(base[i]);
-    }
-  }
-  elemento.parentNode.removeChild(elemento);
-  position--;
-  base = "";
-  base = newList;
+  // for (let i in base) {
+  //   if (base[i][0] != id) {
+  //     newList.push(base[i]);
+  //   }
+  // }
+  // elemento.parentNode.removeChild(elemento);
+  // position--;
+  // base = "";
+  // base = newList;
 
-  console.log(base);
+  console.log("excluir");
 }
 
-function editar(valor){
-  let elemento = valor.parentNode.parentNode;
-  var id = elemento.getAttribute('dados');
-  var textoEntrada = '';
+function editar(valor) {
+  // let elemento = valor.parentNode.parentNode;
+  // var id = elemento.getAttribute('dados').toString();
+  // var textoEntrada = '';
 
-  for (let i=1;i<position;i++){
-    if(base[0][i]==id){
-      textoEntrada = base[1][i];
-      break;
-    }
-  }
+  // for (let i=1;i<=position;i++){
+  //   console.log("i",i,"pos",position,"Id",id,"Base",base[i][0]);
+  //   if(base[i][0]==id){
+  //     textoEntrada[0] = base[i][1];
+  //     document.getElementsByTagName("input")[0].value = base[i][1]
+  //     break;
+  //   }
+  // }
+  // botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
+  // botao.innerHTML = 'Alterar'
 
-  console.log("id",id,"Texto",textoEntrada);
+  // geraAtributo(botao, "onclick", "altera(this)")
+  // geraAtributo(botao, "dado", id)
+
+  console.log("Editar");
 }
 
-
+function altera(valor) {
+  console.log("Alterar");
+  // var t = valor.parentNode.getElementsByTagName('input')[0].value;
+  // var x = valor.parentNode.getElementsByTagName('button')[0].getAttribute('dado');
+  // console.log(t,x);
+}
 
 // let lista = [];
 
