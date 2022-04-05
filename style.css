@@ -90,3 +90,7 @@ input {
   color: var(--red-ligth);
   margin-top: 30px;
 }
+
+.checked{
+  color: rgba(0, 0, 0,0.5);
+}

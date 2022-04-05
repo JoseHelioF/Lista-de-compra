@@ -6,6 +6,9 @@ let textoEntrada = document.getElementsByTagName("input");
 var elemento_pai = document.getElementsByTagName("section")[0];
 let position = Object.keys(base).length;
 var db = openDatabase("myDB", "1.0", "TIPS Database Example", 2 * 1024 * 1024);
+// db.transaction(function (tx) {
+//   tx.executeSql("DROP TABLE  myTable ");
+// });
 
 db.transaction(function (tx) {
   tx.executeSql(
@@ -19,18 +22,19 @@ console.log(db);
 function gera() {
   if (textoEntrada[0].value) {
     nome = textoEntrada[0].value;
-    id = new Date().getDate().toString();
+    id = Date.now().toString();
+    // id = 12;
     console.log("id", id);
     db.transaction(function (tx) {
       tx.executeSql("INSERT INTO  myTable (id,nome) VALUES (?,?)", [id, nome]);
     });
     criaArticle(id);
-  } 
-  else {
+  } else {
     alert("Digite algo");
   }
 
   textoEntrada[0].value = "";
+
 }
 
 //Cria o elemento sem fazer vínculo
@@ -68,66 +72,68 @@ function criaArticle(id) {
   geraAtributo(tagD, "class", "buttons");
   var tagBD = geraFilho(tagArticleF, tagD);
 
+  // var tagB = geraElemento("input");
+  // geraAtributo(tagB, "class", "check");
+  // geraAtributo(tagB, "type", "checkbox");
+  // var tagBF = geraFilho(tagBD, tagB);
+
   var tagB = geraElemento("button");
   geraAtributo(tagB, "class", "btnEdit");
   geraAtributo(tagB, "onclick", "editar(this)");
   var tagBF = geraFilho(tagBD, tagB);
   tagBF.innerHTML = "Editar";
 
-  console.log(tagBF);
+  // console.log(tagBF);
 
   var tagB = geraElemento("button");
   geraAtributo(tagB, "class", "btnDelete");
   geraAtributo(tagB, "onclick", "excluir(this)");
   var tagBF = geraFilho(tagBD, tagB);
   tagBF.innerHTML = "Excluir";
+
+  ///******************* */
+
 }
 
 function excluir(valor) {
-  // let elemento = valor.parentNode.parentNode
-  // var id = elemento.getAttribute('dados');
-  // var newList = [];
+  let elemento = valor.parentNode.parentNode
+  var id = elemento.getAttribute('dados');
+  console.log(elemento, "ID", id);
 
-  // for (let i in base) {
-  //   if (base[i][0] != id) {
-  //     newList.push(base[i]);
-  //   }
-  // }
-  // elemento.parentNode.removeChild(elemento);
-  // position--;
-  // base = "";
-  // base = newList;
+  db.transaction(function (tx) {
+    tx.executeSql("DELETE from myTable WHERE id=(?) ;", [id]);
+  });
 
-  console.log("excluir");
+  elemento.parentNode.removeChild(elemento);
+  console.log("Excluir");
 }
 
 function editar(valor) {
-  // let elemento = valor.parentNode.parentNode;
-  // var id = elemento.getAttribute('dados').toString();
-  // var textoEntrada = '';
+  let elemento = valor.parentNode.parentNode;
+  var id = elemento.getAttribute('dados').toString();
+  var texto = elemento.getElementsByTagName('p')[0].innerHTML;
+  textoEntrada[0].value = texto;
+  var teste = valor;
+  console.log("Elemento", texto, "ID", id);
 
-  // for (let i=1;i<=position;i++){
-  //   console.log("i",i,"pos",position,"Id",id,"Base",base[i][0]);
-  //   if(base[i][0]==id){
-  //     textoEntrada[0] = base[i][1];
-  //     document.getElementsByTagName("input")[0].value = base[i][1]
-  //     break;
-  //   }
-  // }
-  // botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
-  // botao.innerHTML = 'Alterar'
-
-  // geraAtributo(botao, "onclick", "altera(this)")
-  // geraAtributo(botao, "dado", id)
-
+  botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
+  botao.innerHTML = 'Alterar'
+  geraAtributo(botao, "onclick", "altera(" + teste + ",this," + id + ")")
   console.log("Editar");
 }
 
-function altera(valor) {
-  console.log("Alterar");
-  // var t = valor.parentNode.getElementsByTagName('input')[0].value;
-  // var x = valor.parentNode.getElementsByTagName('button')[0].getAttribute('dado');
-  // console.log(t,x);
+function altera(origem, valor, id) {
+  texto = textoEntrada[0].value
+  db.transaction(function (tx) {
+    tx.executeSql("UPDATE myTable SET nome = (?) WHERE id=(?) ;", [texto, id]);
+  });
+
+  botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
+  botao.innerHTML = 'Gerar'
+  geraAtributo(botao, "onclick", "gera()")
+  textoEntrada[0].value = ""
+  console.log('valor',valor);
+  console.log('origem',origem);
 }
 
 // let lista = [];
