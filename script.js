@@ -4,6 +4,7 @@ let base = [];
 // Variáveis principais
 let textoEntrada = document.getElementsByTagName("input");
 var elemento_pai = document.getElementsByTagName("section")[0];
+var elementoAltera = "";
 let position = Object.keys(base).length;
 var db = openDatabase("myDB", "1.0", "TIPS Database Example", 2 * 1024 * 1024);
 // db.transaction(function (tx) {
@@ -113,19 +114,23 @@ function editar(valor) {
   var id = elemento.getAttribute('dados').toString();
   var texto = elemento.getElementsByTagName('p')[0].innerHTML;
   textoEntrada[0].value = texto;
-  var teste = valor;
-  console.log("Elemento", texto, "ID", id);
+  elementoAltera = valor;
+  console.log("Elemento", texto,"teste", elementoAltera, "ID", id);
 
   botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
   botao.innerHTML = 'Alterar'
-  geraAtributo(botao, "onclick", "altera(" + teste + ",this," + id + ")")
+  geraAtributo(botao, "onclick", "altera(this," + id + ")")
   console.log("Editar");
 }
 
-function altera(origem, valor, id) {
+function altera(valor, id) {
   texto = textoEntrada[0].value
+  elementoAltera.parentNode.parentNode.getElementsByTagName('p')[0].innerHTML= texto;
+  let vid = parseInt(elementoAltera.parentNode.parentNode.getAttribute('dados'));
+  
+  console.log('elementoAltera',elementoAltera.parentNode.parentNode);
   db.transaction(function (tx) {
-    tx.executeSql("UPDATE myTable SET nome = (?) WHERE id=(?) ;", [texto, id]);
+    tx.executeSql("UPDATE myTable SET nome = (?) WHERE id=(?) ;",[texto,vid]);
   });
 
   botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
@@ -133,7 +138,8 @@ function altera(origem, valor, id) {
   geraAtributo(botao, "onclick", "gera()")
   textoEntrada[0].value = ""
   console.log('valor',valor);
-  console.log('origem',origem);
+  console.log("III",typeof id, typeof vid);
+  console.log(id===vid , texto);
 }
 
 // let lista = [];
