@@ -17,6 +17,7 @@ db.transaction(function (tx) {
   );
 });
 
+
 console.log(db);
 
 //Gerar os valores para inserir no array
@@ -73,10 +74,10 @@ function criaArticle(id) {
   geraAtributo(tagD, "class", "buttons");
   var tagBD = geraFilho(tagArticleF, tagD);
 
-  // var tagB = geraElemento("input");
-  // geraAtributo(tagB, "class", "check");
-  // geraAtributo(tagB, "type", "checkbox");
-  // var tagBF = geraFilho(tagBD, tagB);
+  var tagB = geraElemento("input");
+  geraAtributo(tagB, "type", "checkbox");
+  geraAtributo(tagB, "onclick", "checar(this)");
+  var tagBF = geraFilho(tagBD, tagB);
 
   var tagB = geraElemento("button");
   geraAtributo(tagB, "class", "btnEdit");
@@ -142,21 +143,24 @@ function altera(valor, id) {
   console.log(id===vid , texto);
 }
 
-// let lista = [];
+function checar(valor){
+  valor.parentNode.parentNode.classList.toggle("check")  
+}
 
-// lista = [[1,2],[3,4],[5,6],[7,8],[9,10]]
-// console.log(lista);
-// let item = 6;
-// var newt = [];
-// for (let  i of lista){
-//   if(i[1]!=6){
-//     newt.push(i);
-//    }
+function limpa(){
+  db.transaction(function (tx) {
+    tx.executeSql("DELETE FROM myTable;");
+  });
+  
+  // elemento_pai.parentNode.removeChild(elemento_pai);
 
-//   console.log("lista",i[1]);
-// }
-// newt[5] = [11,12];
-// console.log(newt);
-// // for (let i = 0; i< lista.length;i++){
-// //   console.log(lista[i][1]);
-// // }
+  console.log(elemento_pai);
+  section = elemento_pai.getElementsByTagName('article')
+  for(let i = 0 ; i < section.length;i++){
+    console.log("qqq",section[i]);
+    section[i].parentNode.removeChild(section[i])
+  }
+  
+  
+  console.log("Limpa",elemento_pai);
+}

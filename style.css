@@ -87,10 +87,13 @@ input {
   justify-content: center;
 }
 .btnFinal {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 2px;
   color: var(--red-ligth);
   margin-top: 30px;
 }
 
-.checked{
-  color: rgba(0, 0, 0,0.5);
+.check{
+  background-color: rgba(0, 255, 0,0.2);
 }
