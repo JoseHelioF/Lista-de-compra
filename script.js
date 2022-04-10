@@ -1,15 +1,13 @@
-//Array para guardar as informações da lista
-let base = [];
-
 // Variáveis principais
 let textoEntrada = document.getElementsByTagName("input");
 var elemento_pai = document.getElementsByTagName("section")[0];
 var elementoAltera = "";
-let position = Object.keys(base).length;
 var db = openDatabase("myDB", "1.0", "TIPS Database Example", 2 * 1024 * 1024);
 // db.transaction(function (tx) {
 //   tx.executeSql("DROP TABLE  myTable ");
 // });
+
+document.addEventListener("load", carrega());
 
 db.transaction(function (tx) {
   tx.executeSql(
@@ -17,14 +15,29 @@ db.transaction(function (tx) {
   );
 });
 
-
-console.log(db);
+// console.log(db);
+function carrega() {
+  db.transaction(function (tx) {
+    tx.executeSql("SELECT * FROM myTable ", [], function (tx, resultado) {
+      var dados = resultado.rows;
+      for (let i = 0; i < dados.length; i++) {
+        console.log("xxx", dados[i].id, dados[i].nome);
+        textoEntrada[0].value = dados[i].nome;
+        gera(dados[i].id);
+      }
+    });
+  });
+}
 
 //Gerar os valores para inserir no array
-function gera() {
+function gera(d) {
   if (textoEntrada[0].value) {
     nome = textoEntrada[0].value;
-    id = Date.now().toString();
+    if (d == 0) {
+      id = Date.now().toString();
+    } else {
+      id = d;
+    }
     // id = 12;
     console.log("id", id);
     db.transaction(function (tx) {
@@ -36,7 +49,7 @@ function gera() {
   }
 
   textoEntrada[0].value = "";
-
+  textoEntrada[0].focus();
 }
 
 //Cria o elemento sem fazer vínculo
@@ -94,12 +107,11 @@ function criaArticle(id) {
   tagBF.innerHTML = "Excluir";
 
   ///******************* */
-
 }
 
 function excluir(valor) {
-  let elemento = valor.parentNode.parentNode
-  var id = elemento.getAttribute('dados');
+  let elemento = valor.parentNode.parentNode;
+  var id = elemento.getAttribute("dados");
   console.log(elemento, "ID", id);
 
   db.transaction(function (tx) {
@@ -112,55 +124,62 @@ function excluir(valor) {
 
 function editar(valor) {
   let elemento = valor.parentNode.parentNode;
-  var id = elemento.getAttribute('dados').toString();
-  var texto = elemento.getElementsByTagName('p')[0].innerHTML;
+  var id = elemento.getAttribute("dados").toString();
+  var texto = elemento.getElementsByTagName("p")[0].innerHTML;
   textoEntrada[0].value = texto;
   elementoAltera = valor;
-  console.log("Elemento", texto,"teste", elementoAltera, "ID", id);
+  console.log("Elemento", texto, "teste", elementoAltera, "ID", id);
 
-  botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
-  botao.innerHTML = 'Alterar'
-  geraAtributo(botao, "onclick", "altera(this," + id + ")")
+  botao = document
+    .getElementsByClassName("submit")[0]
+    .getElementsByTagName("button")[0];
+  botao.innerHTML = "Alterar";
+  geraAtributo(botao, "onclick", "altera(this," + id + ")");
   console.log("Editar");
 }
 
 function altera(valor, id) {
-  texto = textoEntrada[0].value
-  elementoAltera.parentNode.parentNode.getElementsByTagName('p')[0].innerHTML= texto;
-  let vid = parseInt(elementoAltera.parentNode.parentNode.getAttribute('dados'));
-  
-  console.log('elementoAltera',elementoAltera.parentNode.parentNode);
+  texto = textoEntrada[0].value;
+  elementoAltera.parentNode.parentNode.getElementsByTagName("p")[0].innerHTML =
+    texto;
+  let vid = parseInt(
+    elementoAltera.parentNode.parentNode.getAttribute("dados")
+  );
+
+  console.log("elementoAltera", elementoAltera.parentNode.parentNode);
   db.transaction(function (tx) {
-    tx.executeSql("UPDATE myTable SET nome = (?) WHERE id=(?) ;",[texto,vid]);
+    tx.executeSql("UPDATE myTable SET nome = (?) WHERE id=(?) ;", [texto, vid]);
   });
 
-  botao = document.getElementsByClassName('submit')[0].getElementsByTagName('button')[0]
-  botao.innerHTML = 'Gerar'
-  geraAtributo(botao, "onclick", "gera()")
-  textoEntrada[0].value = ""
-  console.log('valor',valor);
-  console.log("III",typeof id, typeof vid);
-  console.log(id===vid , texto);
+  botao = document
+    .getElementsByClassName("submit")[0]
+    .getElementsByTagName("button")[0];
+  botao.innerHTML = "Gerar";
+  geraAtributo(botao, "onclick", "gera()");
+  textoEntrada[0].value = "";
+  console.log("valor", valor);
+  console.log("III", typeof id, typeof vid);
+  console.log(id === vid, texto);
 }
 
-function checar(valor){
-  valor.parentNode.parentNode.classList.toggle("check")  
+function checar(valor) {
+  valor.parentNode.parentNode.classList.toggle("check");
 }
 
-function limpa(){
+function limpa() {
   db.transaction(function (tx) {
     tx.executeSql("DELETE FROM myTable;");
   });
-  
+
   // elemento_pai.parentNode.removeChild(elemento_pai);
 
   console.log(elemento_pai);
-  section = elemento_pai.getElementsByTagName('article')
-  for(let i = 0 ; i < section.length;i++){
-    console.log("qqq",section[i]);
-    section[i].parentNode.removeChild(section[i])
+  section = elemento_pai.getElementsByTagName("article");
+  const tam = section.length;
+  for (let i = tam - 1; i >= 0; i--) {
+    console.log("qqq", i, tam, "i", section[i]);
+    section[i].parentNode.removeChild(section[i]);
   }
-  
-  
-  console.log("Limpa",elemento_pai);
+
+  console.log("Limpa", elemento_pai);
 }
