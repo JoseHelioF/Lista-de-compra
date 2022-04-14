@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lista de Compras</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-    <div class="root">
+  <body>
+    <header>
+      <p><a href="assets/cadastro.html">Cadastro</a></p>
+    </header>
+    <main>
+      <div class="root">
         <div class="container">
-            <h2>Lista de Compras</h2>
-            <div class="submit">
-                <input type="text" placeholder="Digite o Item" value="t">
-                <button type="submit" class="btnGera" onclick="gera()">Gerar</button>
-            </div>
-            <section>
-                
-                
-            </section>
-            <section class="sectionFinal">
-                <button class="btnFinal" onclick="limpa()">Limpa Itens</button>
-            </section>
+          <h2>Lista de Compras</h2>
+          <div class="submit">
+            <input type="text" placeholder="Digite o Item" />
+            <button type="submit" class="btnGera" onclick="gera(0)">
+              Gerar
+            </button>
+          </div>
+          <section></section>
+          <section class="sectionFinal">
+            <button class="btnFinal" onclick="limpa()">Limpa Itens</button>
+          </section>
         </div>
-
-    </div>
+      </div>
+    </main>
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
