@@ -4,22 +4,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lista de Compras</title>
+    <title>Cadastro</title>
     <link rel="stylesheet" href="assets/style.css">
   </head>
-
   <body>
     <header>
-      <p><a href="cadastro.html">Cadastro</a></p>
+      <p><a href="index.html">Principal</a></p>
     </header>
     <main>
       <div class="root">
-        <div class="container">
-          <h2>Lista de Compras</h2>
-          <div class="submit">
-            <input type="text" placeholder="Digite o Item" />
-            <button type="submit" class="btnGera" onclick="gera(0)">
-              Gerar
+        <div class="container cad">
+          <h2>Cadastro de Itens</h2>
+          <div class="submit cadastro">
+            <input type="text" placeholder="Descrição">
+            <input type="text" placeholder="Unidade">
+            <button type="submit" class="btnGera" onclick="gravaitem(this)">
+              Grava
             </button>
           </div>
           <section></section>
@@ -29,6 +29,6 @@
         </div>
       </div>
     </main>
-    <script src="assets/script.js"></script>
+    <script src="assets/cadastro.js"></script>
   </body>
 </html>
